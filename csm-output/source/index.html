@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="ar" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CSM Taksit — Pro Reel 45s</title>
+    <script src="assets/lib/gsap.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Cairo:wght@400;700;900&family=Tajawal:wght@500;700;900&family=Space+Mono:wght@400;700&display=block"
+      rel="stylesheet"
+    />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1080px; height: 1920px;
+        overflow: hidden;
+        background: #ffffff;
+        font-family: "Inter", "Cairo", sans-serif;
+        color: #0a0a0a;
+      }
+      :root {
+        --blue: #0d2d6b;
+        --blue-2: #1e4ba0;
+        --gold: #d4a456;
+        --gold-2: #b88a3f;
+        --fb: #1877F2;
+        --ink: #0a0a0a;
+        --paper: #ffffff;
+        --soft: #f4f3ef;
+      }
+
+      .scene {
+        position: absolute; inset: 0;
+        width: 100%; height: 100%;
+      }
+      .scene-white { background: var(--paper); }
+      .scene-blue  { background: radial-gradient(ellipse at 50% 30%, #1e4ba0 0%, #0d2d6b 60%, #06183f 100%); }
+      .scene-gold  { background: linear-gradient(160deg, #e7c177 0%, #d4a456 50%, #b88a3f 100%); }
+      .scene-dark  { background: #050a18; }
+
+      .bg-img {
+        position: absolute;
+        top: 0; left: 0;
+        width: 1080px; height: 1920px;
+        object-fit: cover;
+        background: #000;
+        will-change: transform;
+      }
+
+      .vid-vignette {
+        position: absolute; inset: 0;
+        background:
+          linear-gradient(180deg, rgba(0,0,0,0.45) 0%, transparent 25%, transparent 70%, rgba(0,0,0,0.55) 100%);
+        pointer-events: none;
+      }
+
+      /* ============= S1: LOGO PUNCH ============= */
+      .s1-flash {
+        position: absolute; inset: 0;
+        background: #fff;
+      }
+      .s1-content {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 50px;
+      }
+      .logo-circle {
+        width: 480px; height: 480px;
+        border-radius: 50%;
+        background: radial-gradient(ellipse at 50% 30%, #1e4ba0 0%, #0d2d6b 60%, #06183f 100%);
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 30px 80px rgba(13, 45, 107, 0.5);
+        position: relative;
+      }
+      .logo-csm {
+        font-family: "Anton", sans-serif;
+        font-size: 210px;
+        color: #fff;
+        line-height: 0.9;
+        letter-spacing: -0.04em;
+      }
+      .logo-house {
+        position: absolute;
+        top: 70px; left: 50%;
+        width: 120px; height: 60px;
+        margin-left: -60px;
+      }
+      .logo-house svg { width: 100%; height: 100%; }
+      .s1-taksit {
+        display: flex; align-items: center; gap: 28px;
+      }
+      .s1-line { width: 70px; height: 4px; background: var(--blue); }
+      .s1-tk {
+        font-family: "Anton", sans-serif;
+        font-size: 100px;
+        color: var(--blue);
+        letter-spacing: 0.2em;
+      }
+      .s1-tag {
+        font-family: "Inter", sans-serif;
+        font-size: 32px;
+        font-weight: 600;
+        letter-spacing: 0.25em;
+        color: var(--gold-2);
+        text-transform: uppercase;
+      }
+
+      /* ============= S2: HOOK ============= */
+      .s2-content {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 60px; padding: 80px;
+      }
+      .s2-shape {
+        position: absolute; border-radius: 50%;
+      }
+      .s2-shape-1 { top: 200px; left: -120px; width: 320px; height: 320px; background: var(--gold); opacity: 0.18; }
+      .s2-shape-2 { bottom: 220px; right: -100px; width: 340px; height: 340px; background: var(--blue); opacity: 0.12; border-radius: 30%; }
+      .s2-q {
+        position: absolute;
+        top: 220px; right: 120px;
+        font-family: "Anton", sans-serif;
+        font-size: 400px;
+        color: var(--gold);
+        opacity: 0.22;
+        line-height: 1;
+      }
+      .s2-eyebrow {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 56px;
+        letter-spacing: 0.15em;
+        color: var(--gold-2);
+      }
+      .s2-head {
+        font-family: "Cairo", sans-serif;
+        font-size: 150px;
+        font-weight: 900;
+        line-height: 1.0;
+        text-align: center;
+        color: var(--ink);
+      }
+      .s2-head span { color: var(--blue); }
+      .s2-words {
+        display: flex; gap: 24px;
+        margin-top: 20px;
+      }
+      .s2-word {
+        font-family: "Anton", sans-serif;
+        font-size: 58px;
+        color: var(--blue);
+        padding: 18px 36px;
+        background: var(--soft);
+        border-radius: 100px;
+        letter-spacing: 0.08em;
+      }
+
+      /* ============= S3, S5, S6, S9 video frames ============= */
+      .v-label {
+        position: absolute;
+        top: 120px; left: 80px;
+        padding: 24px 56px;
+        background: var(--paper);
+        color: var(--blue);
+        font-family: "Anton", sans-serif;
+        font-size: 70px;
+        letter-spacing: 0.2em;
+        border-radius: 100px;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+      }
+      .v-label.gold { background: var(--gold); color: #fff; }
+      .v-label.green { background: #1aa364; color: #fff; }
+
+      .v-badge {
+        position: absolute;
+        bottom: 130px; left: 80px;
+        display: flex; align-items: center; gap: 22px;
+        padding: 26px 44px;
+        background: rgba(13, 45, 107, 0.92);
+        border-radius: 100px;
+        color: #fff;
+      }
+      .v-badge-dot {
+        width: 18px; height: 18px; border-radius: 50%;
+        background: var(--gold);
+        box-shadow: 0 0 18px var(--gold);
+      }
+      .v-badge-txt {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 40px;
+        letter-spacing: 0.12em;
+      }
+
+      .v-arrow {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: "Anton", sans-serif;
+        font-size: 180px;
+        color: var(--gold);
+        text-shadow: 0 6px 30px rgba(0,0,0,0.7);
+      }
+
+      .v-step {
+        position: absolute;
+        bottom: 280px; left: 80px;
+        display: flex; flex-direction: column; gap: 8px;
+      }
+      .v-step-num {
+        font-family: "Anton", sans-serif;
+        font-size: 200px;
+        color: var(--gold);
+        line-height: 0.85;
+        text-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      }
+      .v-step-lbl {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 64px;
+        letter-spacing: 0.15em;
+        color: #fff;
+        text-shadow: 0 4px 20px rgba(0,0,0,0.7);
+      }
+
+      /* ============= S4: IDEA ============= */
+      .s4-content {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 50px; padding: 100px 80px;
+      }
+      .s4-bulb {
+        width: 240px; height: 240px;
+        background: var(--gold);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 30px 80px rgba(212, 164, 86, 0.5);
+      }
+      .s4-bulb svg { width: 130px; height: 130px; fill: #fff; }
+      .s4-fr {
+        font-family: "Anton", sans-serif;
+        font-size: 92px;
+        color: var(--blue);
+        letter-spacing: 0.12em;
+        text-align: center;
+        line-height: 0.95;
+      }
+      .s4-ar {
+        font-family: "Cairo", sans-serif;
+        font-size: 110px;
+        font-weight: 900;
+        color: var(--ink);
+        text-align: center;
+      }
+      .s4-ar span { color: var(--gold-2); }
+
+      /* ============= S7: WHITE FLASH CHECK ============= */
+      .s7-content {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 60px;
+      }
+      .s7-check {
+        width: 320px; height: 320px;
+        background: #1aa364;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 30px 80px rgba(26, 163, 100, 0.5);
+      }
+      .s7-check svg { width: 180px; height: 180px; fill: #fff; }
+      .s7-text {
+        font-family: "Anton", sans-serif;
+        font-size: 140px;
+        color: #1aa364;
+        letter-spacing: 0.15em;
+      }
+
+      /* ============= S8: PRODUCTS BURST ============= */
+      .s8-flash {
+        position: absolute; inset: 80px;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 40px;
+      }
+      .s8-img {
+        width: 760px; height: 1080px;
+        border-radius: 32px;
+        background-size: cover;
+        background-position: center;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+      }
+      .s8-img-1 { background-image: url(assets/product-wood-brown.jpg); }
+      .s8-img-2 { background-image: url(assets/product-glass-gold.jpg); }
+      .s8-img-3 { background-image: url(assets/product-white-hallway.jpg); }
+      .s8-img-4 { background-image: url(assets/product-glass-cabinet.jpg); }
+      .s8-tag {
+        font-family: "Anton", sans-serif;
+        font-size: 140px;
+        color: var(--blue);
+        letter-spacing: 0.08em;
+      }
+
+      /* ============= S10: USP GRID ============= */
+      .s10-title {
+        position: absolute; top: 200px; left: 0; right: 0;
+        text-align: center;
+        font-family: "Anton", sans-serif;
+        font-size: 72px;
+        letter-spacing: 0.2em;
+        color: var(--blue);
+      }
+      .s10-grid {
+        position: absolute;
+        top: 380px; left: 80px; right: 80px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+      .s10-card {
+        background: var(--soft);
+        border-radius: 28px;
+        padding: 56px 36px;
+        display: flex; flex-direction: column;
+        align-items: center; gap: 22px;
+        border-top: 6px solid var(--gold);
+      }
+      .s10-card-ic {
+        width: 130px; height: 130px;
+        background: var(--blue);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .s10-card-ic svg { width: 72px; height: 72px; fill: #fff; }
+      .s10-card-fr {
+        font-family: "Anton", sans-serif;
+        font-size: 52px;
+        color: var(--ink);
+        letter-spacing: 0.1em;
+        text-align: center;
+      }
+      .s10-card-ar {
+        font-family: "Cairo", sans-serif;
+        font-size: 38px;
+        font-weight: 700;
+        color: var(--blue-2);
+      }
+
+      /* ============= S11: TAKSIT ============= */
+      .s11-content {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 50px; padding: 80px;
+      }
+      .s11-card {
+        width: 760px; height: 480px;
+        background: linear-gradient(135deg, #0d2d6b 0%, #1e4ba0 100%);
+        border-radius: 36px;
+        padding: 56px;
+        position: relative;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        color: #fff;
+      }
+      .s11-chip {
+        width: 90px; height: 70px;
+        background: linear-gradient(135deg, #f5d76e 0%, #c4a23f 100%);
+        border-radius: 12px;
+      }
+      .s11-num {
+        margin-top: 100px;
+        font-family: "Space Mono", monospace;
+        font-size: 54px;
+        letter-spacing: 0.2em;
+      }
+      .s11-brand {
+        position: absolute;
+        top: 56px; right: 56px;
+        font-family: "Anton", sans-serif;
+        font-size: 56px;
+        letter-spacing: 0.1em;
+      }
+      .s11-bot {
+        margin-top: 32px;
+        display: flex; justify-content: space-between;
+        font-family: "Inter", sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .s11-ar {
+        font-family: "Cairo", sans-serif;
+        font-size: 130px;
+        font-weight: 900;
+        color: #fff;
+        line-height: 1;
+        text-align: center;
+      }
+      .s11-fr {
+        font-family: "Anton", sans-serif;
+        font-size: 64px;
+        color: rgba(255,255,255,0.95);
+        letter-spacing: 0.1em;
+      }
+
+      /* ============= S12: SOCIAL PROOF ============= */
+      .s12-content {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 30px;
+      }
+      .s12-fb {
+        width: 180px; height: 180px;
+        background: var(--fb);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 24px 60px rgba(24, 119, 242, 0.5);
+      }
+      .s12-fb svg { width: 100px; height: 100px; fill: #fff; }
+      .s12-stat {
+        font-family: "Anton", sans-serif;
+        font-size: 360px;
+        color: var(--blue);
+        line-height: 0.85;
+        font-variant-numeric: tabular-nums;
+      }
+      .s12-lbl {
+        font-family: "Anton", sans-serif;
+        font-size: 64px;
+        letter-spacing: 0.3em;
+        color: var(--ink);
+      }
+      .s12-stars {
+        display: flex; gap: 14px;
+        margin-top: 20px;
+      }
+      .s12-star svg { width: 70px; height: 70px; fill: var(--gold); }
+
+      /* ============= S13: FINAL CTA ============= */
+      .s13-content {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 32px; padding: 60px;
+      }
+      .s13-logo {
+        width: 260px; height: 260px;
+        border-radius: 50%;
+        background: radial-gradient(ellipse at 50% 30%, #1e4ba0 0%, #0d2d6b 60%, #06183f 100%);
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+      }
+      .s13-csm {
+        font-family: "Anton", sans-serif;
+        font-size: 120px;
+        color: #fff;
+        letter-spacing: -0.04em;
+      }
+      .s13-handle {
+        font-family: "Inter", sans-serif;
+        font-size: 42px;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: 0.12em;
+      }
+      .s13-btn {
+        display: flex; align-items: center; gap: 22px;
+        padding: 32px 80px;
+        background: var(--fb);
+        color: #fff;
+        font-family: "Anton", sans-serif;
+        font-size: 60px;
+        letter-spacing: 0.1em;
+        border-radius: 100px;
+        text-transform: uppercase;
+        box-shadow: 0 24px 60px rgba(24, 119, 242, 0.55);
+      }
+      .s13-btn svg { width: 60px; height: 60px; fill: #fff; }
+      .s13-followers {
+        font-family: "Anton", sans-serif;
+        font-size: 50px;
+        color: var(--gold);
+        letter-spacing: 0.14em;
+      }
+      .s13-phone {
+        display: flex; align-items: center; gap: 22px;
+        padding: 22px 48px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 100px;
+        color: #fff;
+        font-family: "Inter", sans-serif;
+        font-size: 44px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        font-variant-numeric: tabular-nums;
+      }
+      .s13-phone svg { width: 36px; height: 36px; fill: var(--gold); }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="45"
+      data-width="1080"
+      data-height="1920"
+    >
+      <!-- ============== BACKGROUND MUSIC + SFX ============== -->
+      <audio
+        id="bgm"
+        class="clip"
+        src="assets/sfx/full-audio-45s.mp3"
+        data-start="0"
+        data-duration="45"
+        data-track-index="0"
+        data-volume="1.0"
+      ></audio>
+
+      <!-- ============== S1: LOGO PUNCH (0 - 2.5s) ============== -->
+      <div id="s1" class="scene scene-dark clip" data-start="0" data-duration="2.5" data-track-index="1">
+        <div class="s1-flash" id="s1-flash"></div>
+        <div class="s1-content">
+          <div class="logo-circle">
+            <div class="logo-house">
+              <svg viewBox="0 0 120 60"><path d="M60 5 L10 40 L20 40 L20 55 L50 55 L50 40 L70 40 L70 55 L100 55 L100 40 L110 40 Z M75 25 L95 25 L95 35 L75 35 Z" fill="#fff"/></svg>
+            </div>
+            <div class="logo-csm">CSM</div>
+          </div>
+          <div class="s1-taksit">
+            <div class="s1-line"></div>
+            <div class="s1-tk">TAKSIT</div>
+            <div class="s1-line"></div>
+          </div>
+          <div class="s1-tag">VOTRE MAISON · VOS RÊVES</div>
+        </div>
+      </div>
+
+      <!-- ============== S2: HOOK KINETIC (2.5 - 5.5s) ============== -->
+      <div id="s2" class="scene scene-white clip" data-start="2.5" data-duration="3.0" data-track-index="2">
+        <div class="s2-shape s2-shape-1"></div>
+        <div class="s2-shape s2-shape-2"></div>
+        <div class="s2-q">?</div>
+        <div class="s2-content">
+          <div class="s2-eyebrow">VOUS AVEZ UN ESPACE ?</div>
+          <h1 class="s2-head">عندك <span>مساحة</span> فاضية؟</h1>
+          <div class="s2-words">
+            <div class="s2-word">ESPACE</div>
+            <div class="s2-word">RÊVE</div>
+            <div class="s2-word">DESIGN</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============== S3: BEFORE empty room (5.5 - 9.0s) ============== -->
+      <img id="s3-img" class="bg-img clip" src="assets/frame-empty.jpg"
+        data-start="5.5" data-duration="3.5" data-track-index="3" />
+      <div id="s3" class="scene clip" data-start="5.5" data-duration="3.5" data-track-index="13">
+        <div class="vid-vignette"></div>
+        <div class="v-label">AVANT</div>
+        <div class="v-arrow">↓</div>
+        <div class="v-badge">
+          <div class="v-badge-dot"></div>
+          <div class="v-badge-txt">قبل CSM</div>
+        </div>
+      </div>
+
+      <!-- ============== S4: IDEA (9.0 - 12.0s) ============== -->
+      <div id="s4" class="scene scene-white clip" data-start="9.0" data-duration="3.0" data-track-index="4">
+        <div class="s4-content">
+          <div class="s4-bulb">
+            <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
+          </div>
+          <div class="s4-fr">ON CRÉE<br>POUR VOUS</div>
+          <div class="s4-ar">نصمّم <span>لك</span></div>
+        </div>
+      </div>
+
+      <!-- ============== S5: PROCESS 1 (12.0 - 17.0s) ============== -->
+      <img id="s5-img" class="bg-img clip" src="assets/frame-workers-2.jpg"
+        data-start="12.0" data-duration="5.0" data-track-index="5" />
+      <div id="s5" class="scene clip" data-start="12.0" data-duration="5.0" data-track-index="14">
+        <div class="vid-vignette"></div>
+        <div class="v-label gold">PROCESS</div>
+        <div class="v-step">
+          <div class="v-step-num">01</div>
+          <div class="v-step-lbl">MESURE & CONCEPTION</div>
+        </div>
+      </div>
+
+      <!-- ============== S6: PROCESS 2 (17.0 - 20.5s) ============== -->
+      <img id="s6-img" class="bg-img clip" src="assets/frame-installing.jpg"
+        data-start="17.0" data-duration="3.5" data-track-index="6" />
+      <div id="s6" class="scene clip" data-start="17.0" data-duration="3.5" data-track-index="15">
+        <div class="vid-vignette"></div>
+        <div class="v-label gold">CRAFT</div>
+        <div class="v-step">
+          <div class="v-step-num">02</div>
+          <div class="v-step-lbl">INSTALLATION PRO</div>
+        </div>
+      </div>
+
+      <!-- ============== S7: WHITE FLASH (20.5 - 22.0s) ============== -->
+      <div id="s7" class="scene scene-white clip" data-start="20.5" data-duration="1.5" data-track-index="7">
+        <div class="s7-content">
+          <div class="s7-check">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          </div>
+          <div class="s7-text">DONE</div>
+        </div>
+      </div>
+
+      <!-- ============== S8a: Product 1 — DRESSING (22.0 - 22.7s) ============== -->
+      <div id="s8a" class="scene scene-white clip" data-start="22.0" data-duration="0.7" data-track-index="8">
+        <div class="s8-flash">
+          <div class="s8-img s8-img-1"></div>
+          <div class="s8-tag">DRESSING</div>
+        </div>
+      </div>
+
+      <!-- ============== S8b: Product 2 — GLASS (22.7 - 23.4s) ============== -->
+      <div id="s8b" class="scene scene-white clip" data-start="22.7" data-duration="0.7" data-track-index="9">
+        <div class="s8-flash">
+          <div class="s8-img s8-img-2"></div>
+          <div class="s8-tag">GLASS</div>
+        </div>
+      </div>
+
+      <!-- ============== S8c: Product 3 — PLACARD (23.4 - 24.1s) ============== -->
+      <div id="s8c" class="scene scene-white clip" data-start="23.4" data-duration="0.7" data-track-index="10">
+        <div class="s8-flash">
+          <div class="s8-img s8-img-3"></div>
+          <div class="s8-tag">PLACARD</div>
+        </div>
+      </div>
+
+      <!-- ============== S8d: Product 4 — CABINET (24.1 - 25.0s) ============== -->
+      <div id="s8d" class="scene scene-white clip" data-start="24.1" data-duration="0.9" data-track-index="11">
+        <div class="s8-flash">
+          <div class="s8-img s8-img-4"></div>
+          <div class="s8-tag">CABINET</div>
+        </div>
+      </div>
+
+      <!-- ============== S9: HERO RESULT (25.0 - 30.0s) ============== -->
+      <img id="s9-img" class="bg-img clip" src="assets/frame-hero-day.jpg"
+        data-start="25.0" data-duration="5.0" data-track-index="12" />
+      <div id="s9" class="scene clip" data-start="25.0" data-duration="5.0" data-track-index="16">
+        <div class="vid-vignette"></div>
+        <div class="v-label" style="background: #1aa364; color: #fff;">APRÈS</div>
+        <div class="v-badge" style="background: rgba(26, 163, 100, 0.92);">
+          <div class="v-badge-dot"></div>
+          <div class="v-badge-txt">FAIT PAR CSM</div>
+        </div>
+      </div>
+
+      <!-- ============== S10: USP GRID (30.0 - 34.0s) ============== -->
+      <div id="s10" class="scene scene-white clip" data-start="30.0" data-duration="4.0" data-track-index="17">
+        <div class="s10-title">POURQUOI CSM ?</div>
+        <div class="s10-grid">
+          <div class="s10-card" data-card="1">
+            <div class="s10-card-ic">
+              <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z M20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            </div>
+            <div class="s10-card-fr">SUR MESURE</div>
+            <div class="s10-card-ar">حسب الطلب</div>
+          </div>
+          <div class="s10-card" data-card="2">
+            <div class="s10-card-ic">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="s10-card-fr">QUALITÉ PRO</div>
+            <div class="s10-card-ar">جودة احترافية</div>
+          </div>
+          <div class="s10-card" data-card="3">
+            <div class="s10-card-ic">
+              <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1 .1-1.4z"/></svg>
+            </div>
+            <div class="s10-card-fr">POSE INCLUSE</div>
+            <div class="s10-card-ar">تركيب شامل</div>
+          </div>
+          <div class="s10-card" data-card="4">
+            <div class="s10-card-ic">
+              <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            </div>
+            <div class="s10-card-fr">GARANTIE</div>
+            <div class="s10-card-ar">ضمان</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============== S11: TAKSIT (34.0 - 37.5s) ============== -->
+      <div id="s11" class="scene scene-blue clip" data-start="34.0" data-duration="3.5" data-track-index="18">
+        <div class="s11-content">
+          <div class="s11-card">
+            <div class="s11-brand">TAKSIT</div>
+            <div class="s11-chip"></div>
+            <div class="s11-num">•••• •••• •••• 1234</div>
+            <div class="s11-bot">
+              <span>CSM CLIENT</span>
+              <span>VALID THRU</span>
+            </div>
+          </div>
+          <div class="s11-ar">ادفع بالتقسيط</div>
+          <div class="s11-fr">PAYEZ EN PLUSIEURS FOIS</div>
+        </div>
+      </div>
+
+      <!-- ============== S12: SOCIAL PROOF (37.5 - 41.0s) ============== -->
+      <div id="s12" class="scene scene-white clip" data-start="37.5" data-duration="3.5" data-track-index="19">
+        <div class="s12-content">
+          <div class="s12-fb">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </div>
+          <div class="s12-stat" id="s12-counter">183K</div>
+          <div class="s12-lbl">J'AIME</div>
+          <div class="s12-stars">
+            <div class="s12-star"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+            <div class="s12-star"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+            <div class="s12-star"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+            <div class="s12-star"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+            <div class="s12-star"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============== S13: FINAL CTA (41.0 - 45.0s) ============== -->
+      <div id="s13" class="scene scene-blue clip" data-start="41.0" data-duration="4.0" data-track-index="20">
+        <div class="s13-content">
+          <div class="s13-logo">
+            <div class="s13-csm">CSM</div>
+          </div>
+          <div class="s13-handle">@csmtaksit</div>
+          <div class="s13-btn">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            <span>SUIVEZ-NOUS</span>
+          </div>
+          <div class="s13-followers">★ 183 K J'AIME · CSM TAKSIT</div>
+          <div class="s13-phone">
+            <svg viewBox="0 0 24 24"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1.02 1.02 0 0 0-1.02.24l-2.2 2.2a15.045 15.045 0 0 1-6.59-6.59l2.2-2.21a.96.96 0 0 0 .25-1A11.36 11.36 0 0 1 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg>
+            <span>0770 92 92 91</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // ====== S1: LOGO PUNCH (0 - 2.5s) ======
+      // Start with white flash, then reveal logo
+      tl.fromTo("#s1-flash", { opacity: 1 }, {
+        opacity: 0, duration: 0.4, ease: "power2.out",
+      }, 0.05);
+      tl.from(".logo-circle", {
+        scale: 0, rotation: -270,
+        duration: 0.9, ease: "back.out(1.6)",
+      }, 0.1);
+      tl.from(".logo-house", {
+        y: -80, opacity: 0,
+        duration: 0.4, ease: "back.out(2)",
+      }, 0.7);
+      tl.from(".logo-csm", {
+        scale: 0.4, opacity: 0,
+        duration: 0.4, ease: "back.out(2)",
+      }, 0.6);
+      tl.from(".s1-line", {
+        scaleX: 0, transformOrigin: "center",
+        duration: 0.4, ease: "power3.out",
+      }, 1.0);
+      tl.from(".s1-tk", {
+        y: 30, opacity: 0, letterSpacing: "1em",
+        duration: 0.5, ease: "expo.out",
+      }, 1.05);
+      tl.from(".s1-tag", {
+        y: 20, opacity: 0, duration: 0.4, ease: "power2.out",
+      }, 1.5);
+
+      // ====== S2: HOOK (2.5 - 5.5s) ======
+      tl.from("#s2 .s2-shape-1", { scale: 0, opacity: 0, duration: 0.5, ease: "power3.out" }, 2.55);
+      tl.from("#s2 .s2-shape-2", { scale: 0, opacity: 0, duration: 0.5, ease: "power3.out" }, 2.65);
+      tl.from("#s2 .s2-q", { scale: 0, rotation: -60, opacity: 0, duration: 0.55, ease: "back.out(2.5)" }, 2.7);
+      tl.from("#s2 .s2-eyebrow", { y: -30, opacity: 0, duration: 0.4, ease: "power3.out" }, 2.75);
+      tl.from("#s2 .s2-head", { scale: 3, opacity: 0, duration: 0.7, ease: "expo.out" }, 2.85);
+      tl.from("#s2 .s2-word", { y: 60, opacity: 0, duration: 0.4, stagger: 0.12, ease: "back.out(2)" }, 3.6);
+      // Bounce question mark
+      tl.to("#s2 .s2-q", { rotation: 10, duration: 0.4, ease: "sine.inOut", yoyo: true, repeat: 3 }, 4.0);
+
+      // ====== S3: BEFORE empty (5.5 - 9.0s) ======
+      tl.fromTo("#s3-img", { scale: 1.0 }, { scale: 1.18, duration: 3.5, ease: "none", transformOrigin: "50% 50%" }, 5.5);
+      tl.from("#s3 .v-label", { x: -300, opacity: 0, duration: 0.5, ease: "back.out(1.8)" }, 5.55);
+      tl.from("#s3 .v-arrow", { y: -100, opacity: 0, duration: 0.5, ease: "back.out(2)" }, 5.9);
+      tl.to("#s3 .v-arrow", { y: 30, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 4 }, 6.5);
+      tl.from("#s3 .v-badge", { x: -200, opacity: 0, duration: 0.5, ease: "power3.out" }, 6.0);
+
+      // ====== S4: IDEA (9.0 - 12.0s) ======
+      tl.from("#s4 .s4-bulb", { scale: 0, rotation: -180, duration: 0.6, ease: "back.out(2)" }, 9.05);
+      tl.to("#s4 .s4-bulb", {
+        boxShadow: "0 30px 100px rgba(212, 164, 86, 0.9)",
+        duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 3,
+      }, 9.4);
+      tl.from("#s4 .s4-fr", { scale: 0.5, opacity: 0, duration: 0.5, ease: "back.out(2)" }, 9.6);
+      tl.from("#s4 .s4-ar", { y: 50, opacity: 0, duration: 0.5, ease: "expo.out" }, 9.9);
+
+      // ====== S5: PROCESS 1 (12.0 - 17.0s) ======
+      tl.fromTo("#s5-img", { scale: 1.0, x: 0 }, { scale: 1.2, x: -40, duration: 5.0, ease: "none", transformOrigin: "30% 50%" }, 12.0);
+      tl.from("#s5 .v-label", { scale: 0, rotation: -20, duration: 0.5, ease: "back.out(2)" }, 12.05);
+      tl.from("#s5 .v-step-num", { x: -400, opacity: 0, duration: 0.6, ease: "expo.out" }, 12.3);
+      tl.from("#s5 .v-step-lbl", { y: 30, opacity: 0, duration: 0.5, ease: "power3.out" }, 12.7);
+
+      // ====== S6: PROCESS 2 (17.0 - 20.5s) ======
+      tl.fromTo("#s6-img", { scale: 1.0 }, { scale: 1.18, duration: 3.5, ease: "none", transformOrigin: "70% 50%" }, 17.0);
+      tl.from("#s6 .v-label", { scale: 0, rotation: 20, duration: 0.5, ease: "back.out(2)" }, 17.05);
+      tl.from("#s6 .v-step-num", { x: -400, opacity: 0, duration: 0.6, ease: "expo.out" }, 17.3);
+      tl.from("#s6 .v-step-lbl", { y: 30, opacity: 0, duration: 0.5, ease: "power3.out" }, 17.7);
+
+      // ====== S7: WHITE FLASH CHECK (20.5 - 22.0s) ======
+      tl.from("#s7 .s7-check", { scale: 0, rotation: -180, duration: 0.5, ease: "back.out(2.5)" }, 20.55);
+      tl.from("#s7 .s7-text", { scale: 2, opacity: 0, duration: 0.4, ease: "expo.out" }, 20.9);
+      tl.to("#s7 .s7-check", {
+        scale: 1.1, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 2,
+      }, 21.2);
+
+      // ====== S8: PRODUCT BURST ======
+      // S8a
+      tl.from("#s8a .s8-img", { scale: 1.4, opacity: 0, duration: 0.3, ease: "power3.out" }, 22.0);
+      tl.from("#s8a .s8-tag", { y: 80, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 22.1);
+      // S8b
+      tl.from("#s8b .s8-img", { scale: 1.4, opacity: 0, duration: 0.3, ease: "power3.out" }, 22.7);
+      tl.from("#s8b .s8-tag", { y: 80, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 22.8);
+      // S8c
+      tl.from("#s8c .s8-img", { scale: 1.4, opacity: 0, duration: 0.3, ease: "power3.out" }, 23.4);
+      tl.from("#s8c .s8-tag", { y: 80, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 23.5);
+      // S8d
+      tl.from("#s8d .s8-img", { scale: 1.4, opacity: 0, duration: 0.3, ease: "power3.out" }, 24.1);
+      tl.from("#s8d .s8-tag", { y: 80, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 24.2);
+
+      // ====== S9: HERO (25.0 - 30.0s) ======
+      tl.fromTo("#s9-img", { scale: 1.05 }, { scale: 1.25, duration: 5.0, ease: "power1.inOut", transformOrigin: "50% 60%" }, 25.0);
+      tl.from("#s9 .v-label", { scale: 0, rotation: 15, duration: 0.6, ease: "back.out(2)" }, 25.1);
+      tl.from("#s9 .v-badge", { y: 80, opacity: 0, duration: 0.5, ease: "power3.out" }, 25.4);
+
+      // ====== S10: USP GRID (30.0 - 34.0s) ======
+      tl.from("#s10 .s10-title", { y: -40, opacity: 0, duration: 0.5, ease: "back.out(2)" }, 30.05);
+      tl.from('#s10 .s10-card[data-card="1"]', { scale: 0, opacity: 0, duration: 0.5, ease: "back.out(2)" }, 30.3);
+      tl.from('#s10 .s10-card[data-card="2"]', { scale: 0, opacity: 0, duration: 0.5, ease: "back.out(2)" }, 30.45);
+      tl.from('#s10 .s10-card[data-card="3"]', { scale: 0, opacity: 0, duration: 0.5, ease: "back.out(2)" }, 30.6);
+      tl.from('#s10 .s10-card[data-card="4"]', { scale: 0, opacity: 0, duration: 0.5, ease: "back.out(2)" }, 30.75);
+      tl.from("#s10 .s10-card-ic", { rotation: 180, duration: 0.5, ease: "back.out(2)", stagger: 0.12 }, 31.0);
+
+      // ====== S11: TAKSIT (34.0 - 37.5s) ======
+      tl.from("#s11 .s11-card", { y: 200, opacity: 0, rotation: -8, duration: 0.7, ease: "expo.out" }, 34.05);
+      tl.from("#s11 .s11-chip", { scale: 0, duration: 0.3, ease: "back.out(2)" }, 34.5);
+      tl.from("#s11 .s11-num", { opacity: 0, duration: 0.4 }, 34.7);
+      tl.from("#s11 .s11-ar", { scale: 0.4, opacity: 0, duration: 0.6, ease: "back.out(2)" }, 35.0);
+      tl.from("#s11 .s11-fr", { y: 30, opacity: 0, duration: 0.4, ease: "power3.out" }, 35.4);
+
+      // ====== S12: SOCIAL PROOF (37.5 - 41.0s) ======
+      tl.from("#s12 .s12-fb", { scale: 0, rotation: -90, duration: 0.5, ease: "back.out(2.2)" }, 37.55);
+      // Counter rolls up
+      const counter = { val: 0 };
+      tl.fromTo(counter, { val: 0 }, {
+        val: 183, duration: 0.8, ease: "power2.out",
+        onUpdate: () => {
+          const el = document.getElementById("s12-counter");
+          if (el) el.textContent = Math.round(counter.val) + "K";
+        },
+      }, 37.8);
+      tl.from("#s12 .s12-lbl", { y: 40, opacity: 0, letterSpacing: "0.6em", duration: 0.5, ease: "expo.out" }, 38.4);
+      tl.from("#s12 .s12-star", { scale: 0, rotation: -45, duration: 0.3, stagger: 0.08, ease: "back.out(2.5)" }, 38.7);
+
+      // ====== S13: FINAL CTA (41.0 - 45.0s) ======
+      tl.from("#s13 .s13-logo", { scale: 0, rotation: -360, duration: 0.7, ease: "back.out(1.8)" }, 41.05);
+      tl.from("#s13 .s13-handle", { y: 30, opacity: 0, duration: 0.4, ease: "power3.out" }, 41.4);
+      tl.from("#s13 .s13-btn", { scale: 0, opacity: 0, duration: 0.5, ease: "back.out(2)" }, 41.55);
+      tl.from("#s13 .s13-followers", { y: 30, opacity: 0, duration: 0.4, ease: "power3.out" }, 41.85);
+      tl.from("#s13 .s13-phone", { y: 40, opacity: 0, duration: 0.4, ease: "power3.out" }, 42.0);
+      // Pulse follow button
+      tl.to("#s13 .s13-btn", {
+        scale: 1.08, duration: 0.4, ease: "sine.inOut", yoyo: true, repeat: 5,
+      }, 42.3);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
