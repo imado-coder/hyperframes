@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>Inox El Amana — Cinematic Promo</title>
+<script src="assets/lib/gsap.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:#05070c;color:#fff;font-family:"Tajawal","Cairo","Inter",-apple-system,Arial,sans-serif}
+
+  #root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#05070c}
+
+  .scene{position:absolute;inset:0;overflow:hidden;will-change:transform,opacity}
+  .scene img.bg{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;will-change:transform}
+  .scene .grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,7,12,0.55) 0%,rgba(5,7,12,0) 32%,rgba(5,7,12,0) 60%,rgba(5,7,12,0.92) 100%);pointer-events:none}
+  .scene .vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 45%,rgba(0,0,0,0.55) 100%);pointer-events:none}
+
+  /* Steel sweep */
+  .steel-sweep{position:absolute;inset:0;background:linear-gradient(110deg,transparent 0%,transparent 35%,rgba(220,230,245,0.42) 48%,rgba(255,255,255,0.85) 50%,rgba(220,230,245,0.42) 52%,transparent 65%,transparent 100%);transform:translateX(-100%);pointer-events:none;mix-blend-mode:screen}
+
+  /* Gold bar */
+  .gold-bar{position:absolute;height:6px;background:linear-gradient(90deg,#7d5a14 0%,#d4af37 20%,#f9e08b 50%,#d4af37 80%,#7d5a14 100%);box-shadow:0 0 30px rgba(212,175,55,0.6);border-radius:3px}
+
+  /* HOOK SCENE */
+  .hook-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,#0a1830 0%,#05070c 60%,#000 100%)}
+  .hook-particles{position:absolute;inset:0;pointer-events:none}
+  .hook-dot{position:absolute;width:4px;height:4px;background:#d4af37;border-radius:50%;box-shadow:0 0 12px #d4af37;opacity:0}
+  .hook-title-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:1000px;text-align:center}
+  .hook-pretitle{font-size:34px;font-weight:600;letter-spacing:8px;color:#d4af37;margin-bottom:32px;opacity:0;text-transform:uppercase}
+  .hook-title{font-size:120px;font-weight:900;line-height:0.95;color:#fff;background:linear-gradient(180deg,#ffffff 0%,#cfd6e0 50%,#8f99a8 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 4px 40px rgba(212,175,55,0.18);opacity:0;white-space:nowrap}
+  .hook-subtitle{font-size:42px;font-weight:500;color:#cfd6e0;margin-top:30px;letter-spacing:2px;opacity:0}
+  .hook-underline{display:inline-block;width:0;height:5px;background:linear-gradient(90deg,#7d5a14,#d4af37,#f9e08b,#d4af37,#7d5a14);margin-top:38px;border-radius:3px;box-shadow:0 0 24px rgba(212,175,55,0.55)}
+
+  /* PRODUCT SCENES */
+  .product-caption{position:absolute;left:80px;right:80px;bottom:220px;z-index:6}
+  .pc-eyebrow{display:inline-block;padding:10px 22px;background:rgba(212,175,55,0.18);border:1.5px solid #d4af37;border-radius:4px;color:#f9e08b;font-size:24px;font-weight:600;letter-spacing:4px;margin-bottom:24px;opacity:0;text-transform:uppercase}
+  .pc-title{font-size:108px;font-weight:900;line-height:1;color:#fff;text-shadow:0 6px 40px rgba(0,0,0,0.8);opacity:0;letter-spacing:-1px}
+  .pc-sub{font-size:34px;color:#cfd6e0;margin-top:18px;font-weight:500;opacity:0}
+  .pc-bar{position:absolute;left:80px;bottom:180px;width:0;height:5px;background:linear-gradient(90deg,#d4af37,#f9e08b);border-radius:3px;box-shadow:0 0 20px rgba(212,175,55,0.6)}
+
+  .corner-tag{position:absolute;top:90px;left:80px;display:flex;align-items:center;gap:16px;opacity:0;z-index:6}
+  .corner-tag .dot{width:14px;height:14px;background:#d4af37;border-radius:50%;box-shadow:0 0 16px #d4af37;animation:pulse 1.6s ease-in-out infinite}
+  .corner-tag .label{font-size:24px;font-weight:700;color:#fff;letter-spacing:5px;text-transform:uppercase}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:0.6}}
+
+  .scene-number{position:absolute;top:90px;right:80px;font-size:120px;font-weight:900;color:rgba(255,255,255,0.06);line-height:0.9;opacity:0;z-index:5}
+
+  /* SLOGAN SCENE */
+  .slogan-bg{position:absolute;inset:0;background:linear-gradient(135deg,#05070c 0%,#0a1830 50%,#05070c 100%)}
+  .slogan-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(212,175,55,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,55,0.08) 1px,transparent 1px);background-size:120px 120px;opacity:0}
+  .slogan-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:980px;text-align:center}
+  .slogan-eyebrow{font-size:30px;font-weight:600;letter-spacing:10px;color:#d4af37;margin-bottom:60px;opacity:0;text-transform:uppercase}
+  .slogan-row{display:flex;flex-direction:column;gap:36px;align-items:center}
+  .slogan-word{font-size:140px;font-weight:900;line-height:1;color:#fff;background:linear-gradient(180deg,#ffffff 0%,#cfd6e0 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;opacity:0}
+  .slogan-word.gold{background:linear-gradient(180deg,#f9e08b 0%,#d4af37 50%,#7d5a14 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .slogan-sep{width:160px;height:5px;background:linear-gradient(90deg,transparent,#d4af37 30%,#f9e08b 50%,#d4af37 70%,transparent);opacity:0;box-shadow:0 0 18px #d4af37;border-radius:2px}
+
+  /* GALLERY SCENE */
+  .gallery-bg{position:absolute;inset:0;background:#05070c}
+  .gallery-title{position:absolute;top:140px;left:0;right:0;text-align:center;font-size:60px;font-weight:800;color:#fff;letter-spacing:2px;opacity:0;z-index:5}
+  .gallery-title span{color:#d4af37}
+  .gallery-grid{position:absolute;top:280px;left:60px;right:60px;bottom:280px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:18px}
+  .gallery-cell{position:relative;overflow:hidden;border-radius:14px;opacity:0;transform:scale(0.85);will-change:transform,opacity;border:2px solid rgba(212,175,55,0.2)}
+  .gallery-cell img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .gallery-cell::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,0.7) 100%)}
+
+  /* CTA SCENE */
+  .cta-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 35%,#0a1830 0%,#05070c 70%)}
+  .cta-glow{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(212,175,55,0.35) 0%,rgba(212,175,55,0) 65%);opacity:0;pointer-events:none}
+  .cta-logo-mark{position:absolute;top:280px;left:50%;transform:translateX(-50%);width:240px;height:240px;border-radius:50%;background:linear-gradient(135deg,#0a3d8f 0%,#082b65 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 30px 80px rgba(10,61,143,0.6),inset 0 2px 0 rgba(255,255,255,0.15);opacity:0;z-index:5;border:4px solid #d4af37}
+  .cta-logo-mark::before{content:"";position:absolute;inset:-12px;border:2px solid rgba(212,175,55,0.4);border-radius:50%}
+  .cta-logo-mark svg{width:140px;height:140px}
+  .cta-brand{position:absolute;top:580px;left:0;right:0;text-align:center;font-size:108px;font-weight:900;color:#fff;background:linear-gradient(180deg,#ffffff 0%,#cfd6e0 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;opacity:0;letter-spacing:-1px;z-index:5;white-space:nowrap}
+  .cta-brand-sub{position:absolute;top:720px;left:0;right:0;text-align:center;font-size:38px;font-weight:600;color:#d4af37;letter-spacing:8px;opacity:0;z-index:5;text-transform:uppercase}
+  .cta-tagline{position:absolute;top:830px;left:0;right:0;text-align:center;font-size:34px;font-weight:500;color:#cfd6e0;opacity:0;z-index:5}
+  .cta-phone-wrap{position:absolute;top:1020px;left:0;right:0;display:flex;justify-content:center;z-index:5}
+  .cta-phone-pill{background:linear-gradient(135deg,#f9e08b 0%,#d4af37 50%,#a8851d 100%);padding:26px 50px;border-radius:100px;display:flex;align-items:center;gap:22px;box-shadow:0 30px 80px rgba(212,175,55,0.55),inset 0 2px 0 rgba(255,255,255,0.4);opacity:0;white-space:nowrap}
+  .cta-phone-pill .ic{width:54px;height:54px;background:#05070c;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .cta-phone-pill .ic svg{width:28px;height:28px;fill:#d4af37}
+  .cta-phone-pill .num{font-size:50px;font-weight:900;color:#05070c;font-family:"Inter",sans-serif;letter-spacing:1px;direction:ltr;white-space:nowrap}
+  .cta-fb-wrap{position:absolute;top:1230px;left:0;right:0;display:flex;justify-content:center;z-index:5}
+  .cta-fb{display:flex;align-items:center;gap:22px;background:rgba(255,255,255,0.05);border:2px solid rgba(212,175,55,0.3);padding:24px 50px;border-radius:18px;opacity:0}
+  .cta-fb .ic{width:48px;height:48px;background:#1877f2;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#fff;font-family:"Inter",sans-serif}
+  .cta-fb .txt{font-size:36px;font-weight:700;color:#fff}
+  .cta-loc{position:absolute;top:1430px;left:0;right:0;text-align:center;font-size:30px;color:#cfd6e0;opacity:0;z-index:5;letter-spacing:3px}
+  .cta-loc span{color:#d4af37}
+
+  /* FLASHES */
+  .flash{position:absolute;inset:0;pointer-events:none;z-index:300;opacity:0}
+  .flash.white{background:#fff}
+  .flash.gold{background:#d4af37}
+  .flash.blue{background:#0a3d8f}
+  .flash.dark{background:#000}
+
+  /* TRACKER OVERLAY (light) */
+  .scan-line{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.7),transparent);box-shadow:0 0 12px rgba(212,175,55,0.6);opacity:0;z-index:7}
+
+  /* INTRO COUNTER LABELS */
+  .meta-strip{position:absolute;bottom:90px;left:80px;right:80px;display:flex;justify-content:space-between;align-items:center;opacity:0;z-index:6;font-size:22px;color:rgba(255,255,255,0.6);letter-spacing:4px;text-transform:uppercase;font-weight:600}
+  .meta-strip .left{display:flex;gap:30px;align-items:center}
+  .meta-strip .left .dot{width:8px;height:8px;background:#d4af37;border-radius:50%}
+</style>
+</head>
+<body>
+
+<!-- AUDIO -->
+<audio id="music" class="clip" src="assets/sfx/music-commercial.mp3" data-start="0" data-duration="35" data-track-index="0" data-volume="0.55"></audio>
+
+<!-- SFX clips -->
+<audio id="sfx-riser" class="clip" src="assets/sfx/library2/sfx-riser-up.mp3" data-start="0" data-duration="3" data-track-index="100" data-volume="0.6"></audio>
+<audio id="sfx-impact1" class="clip" src="assets/sfx/library2/sfx-impact-big.mp3" data-start="2.7" data-duration="1.5" data-track-index="101" data-volume="0.85"></audio>
+<audio id="sfx-w1" class="clip" src="assets/sfx/library2/sfx-whoosh-1.mp3" data-start="3" data-duration="0.7" data-track-index="102" data-volume="0.55"></audio>
+<audio id="sfx-w2" class="clip" src="assets/sfx/library2/sfx-whoosh-2.mp3" data-start="6.5" data-duration="0.7" data-track-index="103" data-volume="0.55"></audio>
+<audio id="sfx-w3" class="clip" src="assets/sfx/library2/sfx-whoosh-3.mp3" data-start="10" data-duration="0.7" data-track-index="104" data-volume="0.55"></audio>
+<audio id="sfx-w4" class="clip" src="assets/sfx/library2/sfx-whoosh-1.mp3" data-start="13.5" data-duration="0.7" data-track-index="105" data-volume="0.55"></audio>
+<audio id="sfx-w5" class="clip" src="assets/sfx/library2/sfx-whoosh-2.mp3" data-start="17" data-duration="0.7" data-track-index="106" data-volume="0.55"></audio>
+<audio id="sfx-d1" class="clip" src="assets/sfx/library2/sfx-ding.mp3" data-start="3.3" data-duration="1" data-track-index="110" data-volume="0.4"></audio>
+<audio id="sfx-d2" class="clip" src="assets/sfx/library2/sfx-ding.mp3" data-start="6.8" data-duration="1" data-track-index="111" data-volume="0.4"></audio>
+<audio id="sfx-d3" class="clip" src="assets/sfx/library2/sfx-ding.mp3" data-start="10.3" data-duration="1" data-track-index="112" data-volume="0.4"></audio>
+<audio id="sfx-d4" class="clip" src="assets/sfx/library2/sfx-ding.mp3" data-start="13.8" data-duration="1" data-track-index="113" data-volume="0.4"></audio>
+<audio id="sfx-d5" class="clip" src="assets/sfx/library2/sfx-ding.mp3" data-start="17.3" data-duration="1" data-track-index="114" data-volume="0.4"></audio>
+<audio id="sfx-stinger" class="clip" src="assets/sfx/library2/sfx-stinger.mp3" data-start="20.5" data-duration="2" data-track-index="115" data-volume="0.65"></audio>
+<audio id="sfx-popa" class="clip" src="assets/sfx/library2/sfx-pop.mp3" data-start="21" data-duration="0.6" data-track-index="116" data-volume="0.5"></audio>
+<audio id="sfx-popb" class="clip" src="assets/sfx/library2/sfx-pop.mp3" data-start="21.6" data-duration="0.6" data-track-index="117" data-volume="0.5"></audio>
+<audio id="sfx-popc" class="clip" src="assets/sfx/library2/sfx-pop.mp3" data-start="22.2" data-duration="0.6" data-track-index="118" data-volume="0.5"></audio>
+<audio id="sfx-riser2" class="clip" src="assets/sfx/library2/sfx-riser-fast.mp3" data-start="23.5" data-duration="2" data-track-index="119" data-volume="0.55"></audio>
+<audio id="sfx-impact2" class="clip" src="assets/sfx/library2/sfx-impact-clean.mp3" data-start="25" data-duration="1.5" data-track-index="120" data-volume="0.75"></audio>
+<audio id="sfx-cash" class="clip" src="assets/sfx/library2/sfx-cash.mp3" data-start="28.5" data-duration="2" data-track-index="121" data-volume="0.45"></audio>
+<audio id="sfx-logosting" class="clip" src="assets/sfx/library2/sfx-logo-sting.mp3" data-start="28" data-duration="3" data-track-index="122" data-volume="0.7"></audio>
+<audio id="sfx-zoom" class="clip" src="assets/sfx/library2/sfx-zoom.mp3" data-start="20" data-duration="1" data-track-index="123" data-volume="0.55"></audio>
+
+<div id="root" data-composition-id="main" data-start="0" data-duration="35" data-width="1080" data-height="1920">
+
+  <!-- ============ SCENE 1: HOOK (0–3s) ============ -->
+  <div class="scene" id="s1">
+    <div class="hook-bg"></div>
+    <div class="hook-particles" id="hookParticles"></div>
+    <div class="hook-title-wrap">
+      <div class="hook-pretitle" id="hookPre">SINCE · DZ</div>
+      <div class="hook-title" id="hookTitle">إنوكس الأمانة</div>
+      <div class="hook-subtitle" id="hookSub">Stainless Steel · Premium Craft</div>
+      <div style="margin-top:38px;display:flex;justify-content:center"><div class="hook-underline" id="hookUL"></div></div>
+    </div>
+    <div class="steel-sweep" id="sweep1"></div>
+  </div>
+
+  <!-- ============ SCENE 2: PRODUCT 1 (3–6.5s) STAIRCASE ============ -->
+  <div class="scene" id="s2" style="opacity:0">
+    <img class="bg" id="img2" src="assets/images/p01.jpg" />
+    <div class="grad"></div>
+    <div class="vignette"></div>
+    <div class="corner-tag" id="ct2"><div class="dot"></div><div class="label">01 · SALA</div></div>
+    <div class="scene-number" id="sn2">01</div>
+    <div class="product-caption">
+      <span class="pc-eyebrow" id="pe2">السلالم الفاخرة</span>
+      <div class="pc-title" id="pt2">الإتقان<br><span style="color:#d4af37">الذي يدوم</span></div>
+      <div class="pc-sub" id="ps2">Staircase · Premium Grade Inox 304</div>
+    </div>
+    <div class="pc-bar" id="pb2"></div>
+    <div class="scan-line" id="sl2" style="top:0"></div>
+  </div>
+
+  <!-- ============ SCENE 3: PRODUCT 2 (6.5–10s) BALCONY ============ -->
+  <div class="scene" id="s3" style="opacity:0">
+    <img class="bg" id="img3" src="assets/images/p02.jpg" />
+    <div class="grad"></div>
+    <div class="vignette"></div>
+    <div class="corner-tag" id="ct3"><div class="dot"></div><div class="label">02 · BALCON</div></div>
+    <div class="scene-number" id="sn3">02</div>
+    <div class="product-caption">
+      <span class="pc-eyebrow" id="pe3">الشرفات الزجاجية</span>
+      <div class="pc-title" id="pt3">تصميم<br><span style="color:#d4af37">يخطف الأنفاس</span></div>
+      <div class="pc-sub" id="ps3">Glass Balcony · Modern Architecture</div>
+    </div>
+    <div class="pc-bar" id="pb3"></div>
+    <div class="scan-line" id="sl3" style="top:0"></div>
+  </div>
+
+  <!-- ============ SCENE 4: PRODUCT 3 (10–13.5s) GOLD DETAILS ============ -->
+  <div class="scene" id="s4" style="opacity:0">
+    <img class="bg" id="img4" src="assets/images/p03.jpg" />
+    <div class="grad"></div>
+    <div class="vignette"></div>
+    <div class="corner-tag" id="ct4"><div class="dot"></div><div class="label">03 · DOR</div></div>
+    <div class="scene-number" id="sn4">03</div>
+    <div class="product-caption">
+      <span class="pc-eyebrow" id="pe4">التصاميم الذهبية</span>
+      <div class="pc-title" id="pt4">لمسات<br><span style="color:#d4af37">من الذهب</span></div>
+      <div class="pc-sub" id="ps4">Gold Accent · Luxury Finish</div>
+    </div>
+    <div class="pc-bar" id="pb4"></div>
+    <div class="scan-line" id="sl4" style="top:0"></div>
+  </div>
+
+  <!-- ============ SCENE 5: PRODUCT 4 (13.5–17s) SPIRAL ============ -->
+  <div class="scene" id="s5" style="opacity:0">
+    <img class="bg" id="img5" src="assets/images/p04.jpg" />
+    <div class="grad"></div>
+    <div class="vignette"></div>
+    <div class="corner-tag" id="ct5"><div class="dot"></div><div class="label">04 · DESIGN</div></div>
+    <div class="scene-number" id="sn5">04</div>
+    <div class="product-caption">
+      <span class="pc-eyebrow" id="pe5">حلول مخصصة</span>
+      <div class="pc-title" id="pt5">حسب<br><span style="color:#d4af37">مقاسك</span></div>
+      <div class="pc-sub" id="ps5">Custom · Made for Your Space</div>
+    </div>
+    <div class="pc-bar" id="pb5"></div>
+    <div class="scan-line" id="sl5" style="top:0"></div>
+  </div>
+
+  <!-- ============ SCENE 6: PRODUCT 5 (17–20.5s) FINITION ============ -->
+  <div class="scene" id="s6" style="opacity:0">
+    <img class="bg" id="img6" src="assets/images/p05.jpg" />
+    <div class="grad"></div>
+    <div class="vignette"></div>
+    <div class="corner-tag" id="ct6"><div class="dot"></div><div class="label">05 · QUALITY</div></div>
+    <div class="scene-number" id="sn6">05</div>
+    <div class="product-caption">
+      <span class="pc-eyebrow" id="pe6">تشطيبات احترافية</span>
+      <div class="pc-title" id="pt6">جودة<br><span style="color:#d4af37">لا تُضاهى</span></div>
+      <div class="pc-sub" id="ps6">Professional Finish · Built to Last</div>
+    </div>
+    <div class="pc-bar" id="pb6"></div>
+    <div class="scan-line" id="sl6" style="top:0"></div>
+  </div>
+
+  <!-- ============ SCENE 7: SLOGAN KINETIC (20.5–24s) ============ -->
+  <div class="scene" id="s7" style="opacity:0">
+    <div class="slogan-bg"></div>
+    <div class="slogan-grid" id="slGrid"></div>
+    <div class="slogan-wrap">
+      <div class="slogan-eyebrow" id="slEye">شعارنا · OUR PROMISE</div>
+      <div class="slogan-row">
+        <div class="slogan-word gold" id="slW1">الجودة</div>
+        <div class="slogan-sep" id="slS1"></div>
+        <div class="slogan-word" id="slW2">الإتقان</div>
+        <div class="slogan-sep" id="slS2"></div>
+        <div class="slogan-word gold" id="slW3">حسن التعامل</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SCENE 8: GALLERY GRID (24–28s) ============ -->
+  <div class="scene" id="s8" style="opacity:0">
+    <div class="gallery-bg"></div>
+    <div class="gallery-title" id="gt"><span>+ من 50</span> مشروع منجز</div>
+    <div class="gallery-grid">
+      <div class="gallery-cell" id="gc1"><img src="assets/images/p06.jpg" /></div>
+      <div class="gallery-cell" id="gc2"><img src="assets/images/p07.jpg" /></div>
+      <div class="gallery-cell" id="gc3"><img src="assets/images/p08.jpg" /></div>
+      <div class="gallery-cell" id="gc4"><img src="assets/images/p09.jpg" /></div>
+      <div class="gallery-cell" id="gc5"><img src="assets/images/p10.jpg" /></div>
+      <div class="gallery-cell" id="gc6"><img src="assets/images/p11.jpg" /></div>
+    </div>
+  </div>
+
+  <!-- ============ SCENE 9: CTA (28–35s) ============ -->
+  <div class="scene" id="s9" style="opacity:0">
+    <div class="cta-bg"></div>
+    <div class="cta-glow" id="ctaGlow"></div>
+    <div class="cta-logo-mark" id="ctaLogo">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M50 8 L82 22 L82 50 C82 70 68 84 50 92 C32 84 18 70 18 50 L18 22 Z" fill="#0a3d8f" stroke="#d4af37" stroke-width="2"/>
+        <path d="M30 50 L42 50 L42 42 L58 42 L58 50 L70 50 M30 50 L30 65 L70 65 L70 50" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="38" cy="42" r="4" fill="#d4af37"/>
+        <circle cx="62" cy="42" r="4" fill="#d4af37"/>
+      </svg>
+    </div>
+    <div class="cta-brand" id="ctaBrand">إنوكس الأمانة</div>
+    <div class="cta-brand-sub" id="ctaBrandSub">INOX EL AMANA</div>
+    <div class="cta-tagline" id="ctaTag">الجودة · الإتقان · حسن التعامل</div>
+    <div class="cta-phone-wrap">
+      <div class="cta-phone-pill" id="ctaPhone">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
+        <div class="num">0554 099 337</div>
+      </div>
+    </div>
+    <div class="cta-fb-wrap">
+      <div class="cta-fb" id="ctaFb">
+        <div class="ic">f</div>
+        <div class="txt">Inox El Amana</div>
+      </div>
+    </div>
+    <div class="cta-loc" id="ctaLoc"><span>📍</span> ALGER · ALGÉRIE</div>
+  </div>
+
+  <!-- FLASHES -->
+  <div class="flash white" id="f1"></div>
+  <div class="flash gold" id="f2"></div>
+  <div class="flash dark" id="f3"></div>
+  <div class="flash white" id="f4"></div>
+  <div class="flash blue" id="f5"></div>
+
+</div>
+
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+window.__timelines["main"] = tl;
+
+// Build hook particles
+const hp = document.querySelector('#hookParticles');
+for (let i=0;i<28;i++){
+  const d = document.createElement('div');
+  d.className = 'hook-dot';
+  d.style.left = (Math.random()*1080) + 'px';
+  d.style.top = (Math.random()*1920) + 'px';
+  hp.appendChild(d);
+}
+const dots = hp.querySelectorAll('.hook-dot');
+
+// helper
+const ease = "power3.out";
+
+/* =============== SCENE 1: HOOK 0-3s =============== */
+gsap.set('#hookPre', { y: 30 });
+gsap.set('#hookTitle', { y: 80, scale: 0.85 });
+gsap.set('#hookSub', { y: 25 });
+gsap.set('#sweep1', { x: '-100%' });
+
+tl.to('#hookPre', { opacity: 1, y: 0, duration: 0.5, ease }, 0.15);
+tl.to('#hookTitle', { opacity: 1, y: 0, scale: 1, duration: 0.85, ease: "expo.out" }, 0.35);
+tl.to('#sweep1', { x: '100%', duration: 1.2, ease: "power2.inOut" }, 0.55);
+tl.to('#hookSub', { opacity: 1, y: 0, duration: 0.55, ease }, 1.05);
+tl.to('#hookUL', { width: 320, duration: 0.7, ease: "power2.out" }, 1.4);
+dots.forEach((d, i) => {
+  tl.to(d, { opacity: 0.85, duration: 0.4, ease: "power2.out" }, 0.2 + (i % 14) * 0.06);
+});
+
+// Hook exit
+tl.to('#f1', { opacity: 0.95, duration: 0.06 }, 2.85);
+tl.to('#f1', { opacity: 0, duration: 0.14 }, 2.93);
+tl.to('#s1', { opacity: 0, duration: 0.15 }, 2.95);
+
+/* =============== SCENE 2: P1 STAIRCASE 3-6.5s =============== */
+gsap.set('#img2', { scale: 1.15, x: -20 });
+gsap.set('#pe2', { x: -40 });
+gsap.set('#pt2', { x: -60 });
+gsap.set('#ps2', { x: -30 });
+gsap.set('#sn2', { x: 60, scale: 1.2 });
+
+tl.to('#s2', { opacity: 1, duration: 0.18 }, 3);
+tl.to('#img2', { scale: 1.0, x: 0, duration: 3.5, ease: "none" }, 3);
+tl.to('#ct2', { opacity: 1, duration: 0.4 }, 3.15);
+tl.to('#sn2', { opacity: 1, x: 0, scale: 1, duration: 0.6, ease }, 3.15);
+tl.to('#pe2', { opacity: 1, x: 0, duration: 0.5, ease }, 3.3);
+tl.to('#pt2', { opacity: 1, x: 0, duration: 0.7, ease: "expo.out" }, 3.45);
+tl.to('#ps2', { opacity: 1, x: 0, duration: 0.5, ease }, 3.65);
+tl.to('#pb2', { width: 920, duration: 0.6, ease: "power3.out" }, 3.6);
+tl.to('#sl2', { opacity: 1, top: '100%', duration: 1.8, ease: "none" }, 3.3);
+
+tl.to('#f2', { opacity: 0.6, duration: 0.05 }, 6.4);
+tl.to('#f2', { opacity: 0, duration: 0.12 }, 6.46);
+tl.to('#s2', { opacity: 0, duration: 0.15 }, 6.45);
+
+/* =============== SCENE 3: P2 BALCONY 6.5-10s =============== */
+gsap.set('#img3', { scale: 1.18, y: 30 });
+gsap.set('#pe3', { x: 40 });
+gsap.set('#pt3', { x: 60 });
+gsap.set('#ps3', { x: 30 });
+gsap.set('#sn3', { x: 60, scale: 1.2 });
+
+tl.to('#s3', { opacity: 1, duration: 0.18 }, 6.5);
+tl.to('#img3', { scale: 1.02, y: 0, duration: 3.5, ease: "none" }, 6.5);
+tl.to('#ct3', { opacity: 1, duration: 0.4 }, 6.65);
+tl.to('#sn3', { opacity: 1, x: 0, scale: 1, duration: 0.6, ease }, 6.65);
+tl.to('#pe3', { opacity: 1, x: 0, duration: 0.5, ease }, 6.8);
+tl.to('#pt3', { opacity: 1, x: 0, duration: 0.7, ease: "expo.out" }, 6.95);
+tl.to('#ps3', { opacity: 1, x: 0, duration: 0.5, ease }, 7.15);
+tl.to('#pb3', { width: 920, duration: 0.6, ease: "power3.out" }, 7.1);
+tl.to('#sl3', { opacity: 1, top: '100%', duration: 1.8, ease: "none" }, 6.8);
+
+tl.to('#f1', { opacity: 0.4, duration: 0.05 }, 9.9);
+tl.to('#f1', { opacity: 0, duration: 0.12 }, 9.96);
+tl.to('#s3', { opacity: 0, duration: 0.15 }, 9.95);
+
+/* =============== SCENE 4: P3 GOLD 10-13.5s =============== */
+gsap.set('#img4', { scale: 1.2, x: 20 });
+gsap.set('#pe4', { x: -40 });
+gsap.set('#pt4', { x: -60 });
+gsap.set('#ps4', { x: -30 });
+gsap.set('#sn4', { x: 60, scale: 1.2 });
+
+tl.to('#s4', { opacity: 1, duration: 0.18 }, 10);
+tl.to('#img4', { scale: 1.03, x: 0, duration: 3.5, ease: "none" }, 10);
+tl.to('#ct4', { opacity: 1, duration: 0.4 }, 10.15);
+tl.to('#sn4', { opacity: 1, x: 0, scale: 1, duration: 0.6, ease }, 10.15);
+tl.to('#pe4', { opacity: 1, x: 0, duration: 0.5, ease }, 10.3);
+tl.to('#pt4', { opacity: 1, x: 0, duration: 0.7, ease: "expo.out" }, 10.45);
+tl.to('#ps4', { opacity: 1, x: 0, duration: 0.5, ease }, 10.65);
+tl.to('#pb4', { width: 920, duration: 0.6, ease: "power3.out" }, 10.6);
+tl.to('#sl4', { opacity: 1, top: '100%', duration: 1.8, ease: "none" }, 10.3);
+
+tl.to('#f2', { opacity: 0.55, duration: 0.05 }, 13.4);
+tl.to('#f2', { opacity: 0, duration: 0.12 }, 13.46);
+tl.to('#s4', { opacity: 0, duration: 0.15 }, 13.45);
+
+/* =============== SCENE 5: P4 CUSTOM 13.5-17s =============== */
+gsap.set('#img5', { scale: 1.16, y: -30 });
+gsap.set('#pe5', { x: 40 });
+gsap.set('#pt5', { x: 60 });
+gsap.set('#ps5', { x: 30 });
+gsap.set('#sn5', { x: 60, scale: 1.2 });
+
+tl.to('#s5', { opacity: 1, duration: 0.18 }, 13.5);
+tl.to('#img5', { scale: 1.0, y: 0, duration: 3.5, ease: "none" }, 13.5);
+tl.to('#ct5', { opacity: 1, duration: 0.4 }, 13.65);
+tl.to('#sn5', { opacity: 1, x: 0, scale: 1, duration: 0.6, ease }, 13.65);
+tl.to('#pe5', { opacity: 1, x: 0, duration: 0.5, ease }, 13.8);
+tl.to('#pt5', { opacity: 1, x: 0, duration: 0.7, ease: "expo.out" }, 13.95);
+tl.to('#ps5', { opacity: 1, x: 0, duration: 0.5, ease }, 14.15);
+tl.to('#pb5', { width: 920, duration: 0.6, ease: "power3.out" }, 14.1);
+tl.to('#sl5', { opacity: 1, top: '100%', duration: 1.8, ease: "none" }, 13.8);
+
+tl.to('#f1', { opacity: 0.4, duration: 0.05 }, 16.9);
+tl.to('#f1', { opacity: 0, duration: 0.12 }, 16.96);
+tl.to('#s5', { opacity: 0, duration: 0.15 }, 16.95);
+
+/* =============== SCENE 6: P5 QUALITY 17-20.5s =============== */
+gsap.set('#img6', { scale: 1.18, x: -30, y: 20 });
+gsap.set('#pe6', { x: -40 });
+gsap.set('#pt6', { x: -60 });
+gsap.set('#ps6', { x: -30 });
+gsap.set('#sn6', { x: 60, scale: 1.2 });
+
+tl.to('#s6', { opacity: 1, duration: 0.18 }, 17);
+tl.to('#img6', { scale: 1.02, x: 0, y: 0, duration: 3.5, ease: "none" }, 17);
+tl.to('#ct6', { opacity: 1, duration: 0.4 }, 17.15);
+tl.to('#sn6', { opacity: 1, x: 0, scale: 1, duration: 0.6, ease }, 17.15);
+tl.to('#pe6', { opacity: 1, x: 0, duration: 0.5, ease }, 17.3);
+tl.to('#pt6', { opacity: 1, x: 0, duration: 0.7, ease: "expo.out" }, 17.45);
+tl.to('#ps6', { opacity: 1, x: 0, duration: 0.5, ease }, 17.65);
+tl.to('#pb6', { width: 920, duration: 0.6, ease: "power3.out" }, 17.6);
+tl.to('#sl6', { opacity: 1, top: '100%', duration: 1.8, ease: "none" }, 17.3);
+
+tl.to('#f3', { opacity: 0.9, duration: 0.08 }, 20.35);
+tl.to('#f3', { opacity: 0, duration: 0.12 }, 20.45);
+tl.to('#s6', { opacity: 0, duration: 0.15 }, 20.4);
+
+/* =============== SCENE 7: SLOGAN 20.5-24s =============== */
+gsap.set('#slW1', { y: 60, scale: 0.85 });
+gsap.set('#slW2', { y: 60, scale: 0.85 });
+gsap.set('#slW3', { y: 60, scale: 0.85 });
+gsap.set('#slS1', { scaleX: 0 });
+gsap.set('#slS2', { scaleX: 0 });
+gsap.set('#slEye', { y: 20 });
+
+tl.to('#s7', { opacity: 1, duration: 0.25 }, 20.5);
+tl.to('#slGrid', { opacity: 1, duration: 0.7 }, 20.6);
+tl.to('#slEye', { opacity: 1, y: 0, duration: 0.5, ease }, 20.7);
+tl.to('#slW1', { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "back.out(1.6)" }, 21);
+tl.to('#slS1', { opacity: 1, scaleX: 1, duration: 0.35, ease: "power2.out" }, 21.4);
+tl.to('#slW2', { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "back.out(1.6)" }, 21.55);
+tl.to('#slS2', { opacity: 1, scaleX: 1, duration: 0.35, ease: "power2.out" }, 21.95);
+tl.to('#slW3', { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "back.out(1.6)" }, 22.1);
+
+tl.to('#f2', { opacity: 0.7, duration: 0.06 }, 23.85);
+tl.to('#f2', { opacity: 0, duration: 0.12 }, 23.93);
+tl.to('#s7', { opacity: 0, duration: 0.15 }, 23.95);
+
+/* =============== SCENE 8: GALLERY 24-28s =============== */
+tl.to('#s8', { opacity: 1, duration: 0.2 }, 24);
+tl.fromTo('#gt', { y: -30 }, { opacity: 1, y: 0, duration: 0.6, ease }, 24.1);
+const cells = ['#gc1','#gc2','#gc3','#gc4','#gc5','#gc6'];
+cells.forEach((c, i) => {
+  tl.to(c, { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(1.5)" }, 24.3 + i * 0.12);
+});
+cells.forEach((c, i) => {
+  tl.to(c + ' img', { scale: 1.08, duration: 3, ease: "none" }, 24.5 + i * 0.12);
+});
+
+tl.to('#f4', { opacity: 0.95, duration: 0.08 }, 27.8);
+tl.to('#f4', { opacity: 0, duration: 0.2 }, 27.88);
+tl.to('#s8', { opacity: 0, duration: 0.2 }, 27.92);
+
+/* =============== SCENE 9: CTA 28-35s =============== */
+gsap.set('#ctaLogo', { y: -40, scale: 0.6 });
+gsap.set('#ctaBrand', { y: 50 });
+gsap.set('#ctaBrandSub', { y: 25 });
+gsap.set('#ctaTag', { y: 20 });
+gsap.set('#ctaPhone', { y: 60, scale: 0.85 });
+gsap.set('#ctaFb', { y: 30 });
+gsap.set('#ctaLoc', { y: 20 });
+
+tl.to('#s9', { opacity: 1, duration: 0.25 }, 28);
+tl.to('#ctaGlow', { opacity: 1, duration: 0.8, ease: "power2.out" }, 28.1);
+tl.to('#ctaLogo', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 28.2);
+tl.to('#ctaBrand', { opacity: 1, y: 0, duration: 0.6, ease }, 28.65);
+tl.to('#ctaBrandSub', { opacity: 1, y: 0, duration: 0.5, ease }, 28.95);
+tl.to('#ctaTag', { opacity: 1, y: 0, duration: 0.5, ease }, 29.2);
+tl.to('#ctaPhone', { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "back.out(1.6)" }, 29.6);
+tl.to('#ctaFb', { opacity: 1, y: 0, duration: 0.55, ease }, 30.1);
+tl.to('#ctaLoc', { opacity: 1, y: 0, duration: 0.5, ease }, 30.45);
+
+// Phone pill pulse
+tl.to('#ctaPhone', { scale: 1.04, duration: 0.4, ease: "power1.inOut", yoyo: true, repeat: 5 }, 30.8);
+// Glow breath
+tl.to('#ctaGlow', { scale: 1.15, duration: 1.6, ease: "power1.inOut", yoyo: true, repeat: 1 }, 29.5);
+
+</script>
+</body>
+</html>
